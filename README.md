@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Android Design Support Library Codelab
 
 A full tutorial on how to use Android Design Support Library. (60 mins)
@@ -29,3 +30,7 @@ Developed and all right reserved by Sittiphol Phanvilai (nuuneoi)
 Please feel free to use it as your educational resource but please don't forget to give a credit or link back
 
 Thanks !
+=======
+# IAnWorkspaces
+AndroidDeveloper users
+>>>>>>> 6baf6f415590f08c8a0c4d1af08d5e4a62f30557
