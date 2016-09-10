@@ -15,7 +15,6 @@ import com.ruanchuang.massorganizationsignin.designlibrary.R;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by joho on 2016/5/31.
  */

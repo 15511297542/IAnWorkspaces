@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import com.ruanchuang.massorganizationsignin.designlibrary.R;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * Created by joho on 2016/5/29.
  */
@@ -26,6 +28,9 @@ public class SplashActivity extends AppCompatActivity {
 
         //加载布局
         setContentView(R.layout.activity_splash);
+
+        //初始化后端云
+        Bmob.initialize(this, "16b9dccf1a72e5e4c12abe733848a4d1");
 
         // 检测是否是第一次启动应用
         if (checkFirst()) {

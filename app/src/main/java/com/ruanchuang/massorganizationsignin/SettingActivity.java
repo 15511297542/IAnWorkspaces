@@ -1,88 +1,102 @@
 package com.ruanchuang.massorganizationsignin;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ruanchuang.massorganizationsignin.designlibrary.R;
 
-import java.util.ArrayList;
-import java.util.List;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
- * Created by joho on 2016/5/29.
+ * Created by Administrator on 2016/9/10/010.
  */
-public class SettingActivity extends AppCompatActivity {
-    private ListView lv_loaction;
-    private List<Loaction> lists;
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
     private SharedPreferences sp;
+    private AlertDialog dialog;
+    private View mView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        sp = getSharedPreferences("user", MODE_PRIVATE);
-        lv_loaction = (ListView) findViewById(R.id.lv_loaction);
-        lists = new ArrayList<Loaction>();
 
-        int length = sp.getInt("length",0);
-        if(length == 0){
-            Loaction loaction = new Loaction();
-            loaction.setAddress("没有签到记录");
-            lists.add(loaction);
-        }
-        for(int i=0;i<length;i++) {
-            String address = sp.getString("address"+i,"");
-            Loaction loaction = new Loaction();
-            loaction.setAddress(address);
-            lists.add(loaction);
-        }
+        initUI();
     }
 
-    public void click_loaction(View view){
-        lv_loaction.setAdapter(new MyAdapter());
+    private void initUI() {
+        Button bt_loation = (Button) findViewById(R.id.bt_loation);
+        Button bt_setpwd = (Button) findViewById(R.id.bt_setpwd);
+        Button bt_exit = (Button) findViewById(R.id.bt_exit);
+        bt_loation.setOnClickListener(this);
+        bt_setpwd.setOnClickListener(this);
+        bt_exit.setOnClickListener(this);
     }
 
-    //定义listview的数据适配器
-    private class MyAdapter extends BaseAdapter {
 
-        @Override
-        public int getCount() {
-            return lists.size();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.bt_loation:
+                startActivity(new Intent(getApplicationContext(),SignLocationActivity.class));
+                break;
+            case R.id.bt_setpwd:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                dialog = builder.create();
+                mView = View.inflate(this, R.layout.dialog_setpwd_view, null);
+                dialog.setView(mView, 0, 0, 0, 0);
+                final EditText et_oldpwd = (EditText) mView.findViewById(R.id.et_oldpwd);
+                final EditText et_newpwd = (EditText) mView.findViewById(R.id.et_newpwd);
+                Button bt_submit = (Button) mView.findViewById(R.id.bt_submit);
+                Button bt_cancel = (Button) mView.findViewById(R.id.bt_cancel);
+                bt_submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String oldpwd = et_oldpwd.getText().toString().trim();
+                        final String newpwd = et_newpwd.getText().toString().trim();
+                        // 如果内容不为空
+                        if(!TextUtils.isEmpty(oldpwd) && !TextUtils.isEmpty(newpwd)){
+                            BmobUser.updateCurrentUserPassword(oldpwd, newpwd, new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e==null){
+                                        Toast.makeText(getApplicationContext(),"密码修改成功",Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(getApplicationContext(),"密码修改失败",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            // 隐藏对话框
+                            dialog.dismiss();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"输入的内容不能为空",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                bt_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+                break;
+            case R.id.bt_exit:
+                sp = getSharedPreferences("user", MODE_PRIVATE);
+                sp.edit().clear().commit();
+                BmobUser.logOut();
+                Intent intent = new Intent(getApplicationContext(), LognInActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-
-            if (convertView == null) {
-                view = View.inflate(getApplicationContext(), R.layout.item_location, null);
-            } else {
-                view = convertView;
-            }
-
-            TextView tv_location = (TextView) view.findViewById(R.id.tv_location);
-
-            Loaction loaction = lists.get(position);
-            String ads = loaction.getAddress();
-            tv_location.setText(ads);
-
-            return view;
-        }
-
     }
 }

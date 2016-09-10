@@ -91,7 +91,22 @@ public class MeiGongActivity extends AppCompatActivity {
         lt.setText("加载数据中...").setTranslationY(100).show();
 
         //读取服务器数据
-        ReadUtlis.readData("美工组",lists,mHandler);
+        //ReadUtlis.readData("美工组",lists,mHandler);
+
+        ReadUtlis.queryData("美工组", lists, new ReadUtlis.CallBack() {
+            @Override
+            public void success() {
+                lt.success();
+                lv_meigong.setAdapter(new MyAdapter());
+            }
+
+            @Override
+            public void error() {
+                lt.error();
+                Toast.makeText(getApplicationContext(), "加载失败，请重新加载", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //设置listview条目的点击事件
         lv_meigong.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

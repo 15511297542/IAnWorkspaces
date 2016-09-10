@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.runachuang.massorganizationsignin.utils.MyUser;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by joho on 2016/5/29.
@@ -69,6 +75,41 @@ public class ReadUtlis {
 
             }
         }.start();
+    }
+
+    public static void queryData(String lvgroup, final List<Person> lists,final CallBack cb){
+        BmobQuery<MyUser> query = new BmobQuery<MyUser>();
+        //查询playerName叫“比目”的数据
+        query.addWhereEqualTo("group", lvgroup);
+        //返回50条数据，如果不加上这条语句，默认返回10条数据
+        query.setLimit(50);
+        //执行查询方法
+        query.findObjects(new FindListener<MyUser>() {
+            @Override
+            public void done(List<MyUser> object, BmobException e) {
+                if(e==null){
+                    for (MyUser myUser : object) {
+                        //把数据封装的javabean
+                        Person person = new Person();
+                        person.setName(myUser.getName());
+                        person.setSex(myUser.getSex());
+                        person.setGroup(myUser.getGroup());
+                        person.setPhone(myUser.getMobilePhoneNumber());
+                        //把javabean对象加入到集合
+                        lists.add(person);
+                        cb.success();
+                    }
+                }else{
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    cb.error();
+                }
+            }
+        });
+    }
+
+    public interface CallBack{
+        public abstract void success();
+        public abstract void error();
     }
 }
 

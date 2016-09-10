@@ -4,7 +4,7 @@
         <item
             android:id="@+id/navItem1"
             android:icon="@drawable/ic_me"
-            android:title="我的信息"/>
+            android:title="个人信息"/>
         <item
             android:id="@+id/navItem2"
             android:icon="@drawable/ic_sign"

@@ -2,9 +2,6 @@ package com.ruanchuang.massorganizationsignin;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -98,7 +95,22 @@ public class LeaveActivity extends AppCompatActivity {
         lt.setText("加载数据中...").setTranslationY(100).show();
 
         //读取服务器数据
-        ReadUtlis.readData("行政",lists,mHandler);
+        //ReadUtlis.readData("行政",lists,mHandler);
+
+        ReadUtlis.queryData("行政", lists, new ReadUtlis.CallBack() {
+            @Override
+            public void success() {
+                lt.success();
+                lv_leave.setAdapter(new MyAdapter());
+            }
+
+            @Override
+            public void error() {
+                lt.error();
+                Toast.makeText(getApplicationContext(), "加载失败，请重新加载", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //设置listview条目的点击事件
         lv_leave.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

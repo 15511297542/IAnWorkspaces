@@ -5,21 +5,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +27,8 @@ import com.ruanchuang.massorganizationsignin.designlibrary.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cn.bmob.v3.BmobUser;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     private DrawerLayout drawerLayout;
@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences sp;
 
     private static Boolean isExit = false;
+    private TextView mTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         initUI();
         //设置点击事件
         click();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mName = sp.getString("name", "");
+        mSex = sp.getString("sex", "");
+        mGroup = sp.getString("group", "");
+        mQq = sp.getString("qq", "");
+        mPhone = sp.getString("phone", "");
+
+        mTv.setText(mName);
     }
 
     private FilterMenu attachMenu3(FilterMenuLayout layout){
@@ -100,6 +113,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 case 2:  //退出当前账号
                     sp = getSharedPreferences("user", MODE_PRIVATE);
                     sp.edit().clear().commit();
+                    BmobUser.logOut();
                     Intent intent = new Intent(HomeActivity.this, LognInActivity.class);
                     startActivity(intent);
                     finish();
@@ -132,8 +146,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         //在侧滑栏设置用户姓名
         navigation = (NavigationView) findViewById(R.id.navigation);
         View view = navigation.inflateHeaderView(R.layout.nav_header);
-        TextView tv = (TextView) view.findViewById(R.id.tv_menuname);
-        tv.setText(mName);
+        mTv = (TextView) view.findViewById(R.id.tv_menuname);
+        mTv.setText(mName);
 
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -142,7 +156,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 switch (id) {
                     case R.id.navItem1: //个人信息
                         //显示对话框
-                        showUpDataDialog();
+//                        showUpDataDialog();
+                        startActivity(new Intent(getApplicationContext(),InfoUser.class));
                         break;
                     case R.id.navItem2: //签到
                         Intent intent1 = new Intent(HomeActivity.this, SignActivity.class);

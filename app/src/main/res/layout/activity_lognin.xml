@@ -105,6 +105,14 @@
                     android:text="还没账号，去注册"
                     android:onClick="tv_click"/>
 
+                <TextView
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="忘记密码"
+                    android:onClick="tv_unpwd"/>
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>

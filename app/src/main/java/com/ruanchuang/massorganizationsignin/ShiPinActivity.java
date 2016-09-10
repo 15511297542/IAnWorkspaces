@@ -91,7 +91,22 @@ public class ShiPinActivity extends AppCompatActivity {
         lt.setText("加载数据中...").setTranslationY(100).show();
 
         //读取服务器数据
-        ReadUtlis.readData("视频组",lists,mHandler);
+        //ReadUtlis.readData("视频组",lists,mHandler);
+
+        ReadUtlis.queryData("视频组", lists, new ReadUtlis.CallBack() {
+            @Override
+            public void success() {
+                lt.success();
+                lv_shipin.setAdapter(new MyAdapter());
+            }
+
+            @Override
+            public void error() {
+                lt.error();
+                Toast.makeText(getApplicationContext(), "加载失败，请重新加载", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //设置listview条目的点击事件
         lv_shipin.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
