@@ -1,7 +1,6 @@
 # MassOrganizationSignIn
 
-这是我的第一个小项目：社团签到。也是我第一次提交到github上。它采用的第三方SDK是百度地图。
-里面还采用了好多github前辈的开源类库。
+### 这是我的第一个小项目：社团签到。也是我第一次提交到github上。它采用的第三方SDK是百度地图。里面还采用了好多github前辈的开源类库。新加入了登录，注册，找回密码等功能。
 
 
 ![](https://github.com/IAn2018cs/MassOrganizationSignIn/blob/master/demo.gif)
