@@ -1,15 +1,9 @@
 package com.ruanchuang.massorganizationsignin;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,17 +31,6 @@ public class LognInActivity extends AppCompatActivity {
     private SharedPreferences.Editor edit;
     private String userName;
     private String mPwd;
-    private String name;
-    private String sex;
-    private String group;
-    private String qq;
-    private String phone;
-    private ProgressDialog progressDialog;
-
-    private Toolbar toolbar;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
     private static Boolean isExit = false;
     protected LoadToast lt;
     private final String tag = "LognInActivity";
@@ -65,8 +48,6 @@ public class LognInActivity extends AppCompatActivity {
         //检查是否已经登陆
         checkEnter();
 
-        initToolbar();
-        initInstances();
     }
 
     //检查是否已经登陆
@@ -202,23 +183,6 @@ public class LognInActivity extends AppCompatActivity {
         cb_rember = (CheckBox) findViewById(R.id.cb_rember);
     }
 
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    }
-
-    private void initInstances() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        drawerToggle = new ActionBarDrawerToggle(LognInActivity.this, drawerLayout, R.string.hello_world, R.string.hello_world);
-        drawerLayout.setDrawerListener(drawerToggle);
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
-        collapsingToolbarLayout.setTitle("登陆");
-    }
-
     //监听返回键
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -246,18 +210,6 @@ public class LognInActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 
 }
